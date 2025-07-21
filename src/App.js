@@ -1,24 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import LoginPage from './components/LoginPage';
+import Dashboard from './components/Dashboard';
+import Products from './components/Products';
+import PrivateRoute from './components/PrivateRoute';
+import Navbar from './components/Navbar';
 
 function App() {
+  const isAuth = useSelector((state) => !!state.auth.token); // true if logged in
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      {isAuth && <Navbar />} {/* Only show navbar when authenticated */}
+
+      <Routes>
+        {/* Public Route */}
+        <Route path="/login" element={isAuth ? <Navigate to="/dashboard" /> : <LoginPage />} />
+
+        {/* Private Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }
+        />
+
+        {/* Default Route */}
+        <Route
+          path="/"
+          element={<Navigate to={isAuth ? "/dashboard" : "/login"} />}
+        />
+
+        {/* Fallback for unmatched routes */}
+        <Route
+          path="*"
+          element={<Navigate to={isAuth ? "/dashboard" : "/login"} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
