@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/crm-website/static/js/main.a0f488cf.js",
+    "index.html": "/crm-website/index.html",
+    "main.a0f488cf.js.map": "/crm-website/static/js/main.a0f488cf.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.a0f488cf.js"
+  ]
+}
